@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/2/trunk/src/com/lmdig/android/tutorial/oglbox2dbasics
+END
+MainActivity.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/2/trunk/src/com/lmdig/android/tutorial/oglbox2dbasics/MainActivity.java
+END
+TestGLSurfaceView.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/2/trunk/src/com/lmdig/android/tutorial/oglbox2dbasics/TestGLSurfaceView.java
+END
+PGTestRenderer.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/2/trunk/src/com/lmdig/android/tutorial/oglbox2dbasics/PGTestRenderer.java
+END

@@ -1,0 +1,149 @@
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/2/trunk/src/org/jbox2d/collision
+END
+OBB.java
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/2/trunk/src/org/jbox2d/collision/OBB.java
+END
+Segment.java
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/2/trunk/src/org/jbox2d/collision/Segment.java
+END
+ManifoldPoint.java
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/2/trunk/src/org/jbox2d/collision/ManifoldPoint.java
+END
+Bound.java
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/2/trunk/src/org/jbox2d/collision/Bound.java
+END
+SupportsGenericDistance.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/2/trunk/src/org/jbox2d/collision/SupportsGenericDistance.java
+END
+ContactID.java
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/2/trunk/src/org/jbox2d/collision/ContactID.java
+END
+BroadPhase.java
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/2/trunk/src/org/jbox2d/collision/BroadPhase.java
+END
+PairCallback.java
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/2/trunk/src/org/jbox2d/collision/PairCallback.java
+END
+SortKeyFunc.java
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/2/trunk/src/org/jbox2d/collision/SortKeyFunc.java
+END
+package.html
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/2/trunk/src/org/jbox2d/collision/package.html
+END
+FilterData.java
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/2/trunk/src/org/jbox2d/collision/FilterData.java
+END
+Proxy.java
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/2/trunk/src/org/jbox2d/collision/Proxy.java
+END
+AABB.java
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/2/trunk/src/org/jbox2d/collision/AABB.java
+END
+PairManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/2/trunk/src/org/jbox2d/collision/PairManager.java
+END
+BoundValues.java
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/2/trunk/src/org/jbox2d/collision/BoundValues.java
+END
+portversion.txt
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/2/trunk/src/org/jbox2d/collision/portversion.txt
+END
+Manifold.java
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/2/trunk/src/org/jbox2d/collision/Manifold.java
+END
+Distance.java
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/2/trunk/src/org/jbox2d/collision/Distance.java
+END
+Pair.java
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/2/trunk/src/org/jbox2d/collision/Pair.java
+END
+TOI.java
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/2/trunk/src/org/jbox2d/collision/TOI.java
+END
+Collision.java
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/2/trunk/src/org/jbox2d/collision/Collision.java
+END
+MassData.java
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/2/trunk/src/org/jbox2d/collision/MassData.java
+END
+BufferedPair.java
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/2/trunk/src/org/jbox2d/collision/BufferedPair.java
+END
+SegmentCollide.java
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/2/trunk/src/org/jbox2d/collision/SegmentCollide.java
+END

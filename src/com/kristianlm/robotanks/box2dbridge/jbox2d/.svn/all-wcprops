@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/2/trunk/src/com/kristianlm/robotanks/box2dbridge/jbox2d
+END
+JBox2DWorld.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/!svn/ver/2/trunk/src/com/kristianlm/robotanks/box2dbridge/jbox2d/JBox2DWorld.java
+END
+JBox2DBody.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/2/trunk/src/com/kristianlm/robotanks/box2dbridge/jbox2d/JBox2DBody.java
+END
+JBox2DShape.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/!svn/ver/2/trunk/src/com/kristianlm/robotanks/box2dbridge/jbox2d/JBox2DShape.java
+END

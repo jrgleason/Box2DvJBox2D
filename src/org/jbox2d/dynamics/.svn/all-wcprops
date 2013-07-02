@@ -1,0 +1,107 @@
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/2/trunk/src/org/jbox2d/dynamics
+END
+ContactListener.java
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/2/trunk/src/org/jbox2d/dynamics/ContactListener.java
+END
+ContactFilter.java
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/2/trunk/src/org/jbox2d/dynamics/ContactFilter.java
+END
+BoundaryResponse.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/2/trunk/src/org/jbox2d/dynamics/BoundaryResponse.java
+END
+DebugDraw.java
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/2/trunk/src/org/jbox2d/dynamics/DebugDraw.java
+END
+DefaultContactFilter.java
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/2/trunk/src/org/jbox2d/dynamics/DefaultContactFilter.java
+END
+DestructionListener.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/2/trunk/src/org/jbox2d/dynamics/DestructionListener.java
+END
+BodyGroup.java
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/2/trunk/src/org/jbox2d/dynamics/BodyGroup.java
+END
+Island.java
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/2/trunk/src/org/jbox2d/dynamics/Island.java
+END
+BodyDef.java
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/2/trunk/src/org/jbox2d/dynamics/BodyDef.java
+END
+package.html
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/2/trunk/src/org/jbox2d/dynamics/package.html
+END
+Steppable.java
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/2/trunk/src/org/jbox2d/dynamics/Steppable.java
+END
+ContactManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/2/trunk/src/org/jbox2d/dynamics/ContactManager.java
+END
+World.java
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/2/trunk/src/org/jbox2d/dynamics/World.java
+END
+portversion.txt
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/2/trunk/src/org/jbox2d/dynamics/portversion.txt
+END
+BoundaryListener.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/2/trunk/src/org/jbox2d/dynamics/BoundaryListener.java
+END
+TimeStep.java
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/2/trunk/src/org/jbox2d/dynamics/TimeStep.java
+END
+Body.java
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/2/trunk/src/org/jbox2d/dynamics/Body.java
+END

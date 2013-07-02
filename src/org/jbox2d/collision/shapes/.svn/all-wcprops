@@ -1,0 +1,83 @@
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/2/trunk/src/org/jbox2d/collision/shapes
+END
+ShapeDef.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/2/trunk/src/org/jbox2d/collision/shapes/ShapeDef.java
+END
+CollidePoly.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/2/trunk/src/org/jbox2d/collision/shapes/CollidePoly.java
+END
+Shape.java
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/2/trunk/src/org/jbox2d/collision/shapes/Shape.java
+END
+CircleDef.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/2/trunk/src/org/jbox2d/collision/shapes/CircleDef.java
+END
+ShapeType.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/2/trunk/src/org/jbox2d/collision/shapes/ShapeType.java
+END
+CircleShape.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/2/trunk/src/org/jbox2d/collision/shapes/CircleShape.java
+END
+EdgeShape.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/2/trunk/src/org/jbox2d/collision/shapes/EdgeShape.java
+END
+EdgeChainDef.java
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/2/trunk/src/org/jbox2d/collision/shapes/EdgeChainDef.java
+END
+PolygonDef.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/2/trunk/src/org/jbox2d/collision/shapes/PolygonDef.java
+END
+PolygonShape.java
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/2/trunk/src/org/jbox2d/collision/shapes/PolygonShape.java
+END
+PointDef.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/2/trunk/src/org/jbox2d/collision/shapes/PointDef.java
+END
+PointShape.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/2/trunk/src/org/jbox2d/collision/shapes/PointShape.java
+END
+CollideCircle.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/2/trunk/src/org/jbox2d/collision/shapes/CollideCircle.java
+END
