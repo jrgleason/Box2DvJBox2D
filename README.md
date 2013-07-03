@@ -12,3 +12,9 @@ To test the differance switch the default here...
 vi .//src/com/kristianlm/robotanks/box2dbridge/Box2DFactory.java
 
 and you can change the body count in the for loop.
+
+
+ISSUES
+======
+
+I am currently porting to a new version of Box2D but for now you need to use the libs in oldlibs
