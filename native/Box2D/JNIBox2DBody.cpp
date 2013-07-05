@@ -9,6 +9,7 @@
 
 #include "box2d.h"
 #include "JNIBox2DWorld.h"
+#include "android-log.h"
 
 #include <jni.h>
 
@@ -36,6 +37,7 @@ JNIEXPORT void JNICALL Java_com_kristianlm_robotanks_box2dbridge_jnibox2d_JNIBox
 	}
 
 	jclass bodyClass = env->GetObjectClass(caller);
+        LOGD("Calling the callback");
 	jmethodID setValuesId = env->GetMethodID(bodyClass, "callbackSetData", "(FFFFFFF)V");
 
 	b2Body *body = bodyList[id];
@@ -64,7 +66,7 @@ JNIEXPORT void JNICALL Java_com_kristianlm_robotanks_box2dbridge_jnibox2d_JNIBox
  */
 JNIEXPORT jint JNICALL Java_com_kristianlm_robotanks_box2dbridge_jnibox2d_JNIBox2DBody_nCreateBox
   (JNIEnv *, jobject, jint ID, jfloat width, jfloat height, jfloat x, jfloat y, jfloat density, jfloat angle) {
-
+	LOGD("Starting Method");
 	if(bodyList[ID] == 0)
 		return -1;
 
@@ -82,14 +84,18 @@ JNIEXPORT jint JNICALL Java_com_kristianlm_robotanks_box2dbridge_jnibox2d_JNIBox
 
 
 	// find free shapelist spot and return id
+	LOGD("Doing Fixture Checks");
 	for(int i = 0 ; i < MAX_SHAPES ; i++) {
 		if(shapeList[i] == 0) {
-
-			shapeList[i] = bodyList[ID]->CreateFixture(&pd, density);
+			LOGD("Creating Fixture");
+			b2FixtureDef fixtureDef;
+			fixtureDef.shape = &pd;
+			fixtureDef.density = density;
+			fixtureDef.friction = 0.3f;
+			shapeList[i] = bodyList[ID]->CreateFixture(&fixtureDef);
 			return i;
 		}
 	}
-
 }
 
 /*
@@ -120,7 +126,7 @@ JNIEXPORT jint JNICALL Java_com_kristianlm_robotanks_box2dbridge_jnibox2d_JNIBox
 	{
 		vertices[i].Set(vl[i * 3 + 0], vl[i * 3 + 1]);
 	}
-        // pd->Set(&vertices[0],lenV);
+        pd.Set(&vertices[0],lenV);
 
 
 	// release buffer but don't copy back

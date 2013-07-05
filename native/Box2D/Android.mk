@@ -2,7 +2,7 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 LOCAL_MODULE    := box2D
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/.. $(LOCAL_PATH)/include
-# LOCAL_CFLAGS := -O3 -ffast-math
+NDK_OUT :=../../
 LOCAL_SRC_FILES := \
 	$(subst $(LOCAL_PATH)/,, \
         $(wildcard $(LOCAL_PATH)/*.cpp) \

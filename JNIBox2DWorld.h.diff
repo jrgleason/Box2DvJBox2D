@@ -1,0 +1,4 @@
+24c24
+< extern b2Fixture* shapeList [MAX_SHAPES];
+---
+> extern b2Shape* shapeList [MAX_SHAPES];

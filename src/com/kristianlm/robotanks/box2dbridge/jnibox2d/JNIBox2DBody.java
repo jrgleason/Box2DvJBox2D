@@ -24,6 +24,7 @@ import org.jbox2d.collision.FilterData;
 import org.jbox2d.common.Vec2;
 
 import android.util.FloatMath;
+import android.util.Log;
 
 import com.kristianlm.robotanks.box2dbridge.IBody;
 import com.kristianlm.robotanks.box2dbridge.IShape;
@@ -72,6 +73,7 @@ public class JNIBox2DBody implements IBody {
 	 */
 	public void callbackSetData(float x, float y, float vx, float vy,
 			float angle, float avel, float inertiaInv) {
+	    Log.d("Native","Calling Callback on body "+this.toString()+" x:"+x+" y:"+y+" angVel:"+avel);
 		position.x = x;
 		position.y = y;
 
@@ -105,6 +107,7 @@ public class JNIBox2DBody implements IBody {
 
 	@Override
 	public void applyForce(Vec2 force, Vec2 point) {
+		Log.d("Applying Force","Info: "+bodyID+ " "+ force.x +" "+ force.y +" "+ point.x + " " + point.y);
 		nApplyForce(bodyID, force.x, force.y, point.x, point.y);
 	}
 

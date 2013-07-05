@@ -1,0 +1,4 @@
+9c9
+< #include "jni/JNIShape.h"
+---
+> #include "Headers/gen/com_kristianlm_robotanks_box2dbridge_jnibox2d_JNIBox2DShape.h"

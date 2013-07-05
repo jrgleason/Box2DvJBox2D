@@ -1,0 +1,358 @@
+2c2
+< * Copyright (c) 2006-2009 Erin Catto http://www.box2d.org
+---
+> * Copyright (c) 2006-2007 Erin Catto http://www.gphysics.com
+22,25c22,39
+< #include <Box2D/Common/b2Settings.h>
+< #include <Box2D/Collision/b2Collision.h>
+< #include <Box2D/Collision/b2DynamicTree.h>
+< #include <algorithm>
+---
+> /*
+> This broad phase uses the Sweep and Prune algorithm as described in:
+> Collision Detection in Interactive 3D Environments by Gino van den Bergen
+> Also, some ideas, such as using integral values for fast compares comes from
+> Bullet (http:/www.bulletphysics.com).
+> */
+> 
+> #include "../Common/b2Settings.h"
+> #include "b2Collision.h"
+> #include "b2PairManager.h"
+> #include <limits.h>
+> 
+> #ifdef TARGET_FLOAT32_IS_FIXED
+> #define	B2BROADPHASE_MAX	(USHRT_MAX/2)
+> #else
+> #define	B2BROADPHASE_MAX	USHRT_MAX
+> 
+> #endif
+27c41,55
+< struct b2Pair
+---
+> const uint16 b2_invalid = B2BROADPHASE_MAX;
+> const uint16 b2_nullEdge = B2BROADPHASE_MAX;
+> struct b2BoundValues;
+> 
+> struct b2Bound
+> {
+> 	bool IsLower() const { return (value & 1) == 0; }
+> 	bool IsUpper() const { return (value & 1) == 1; }
+> 
+> 	uint16 value;
+> 	uint16 proxyId;
+> 	uint16 stabbingCount;
+> };
+> 
+> struct b2Proxy
+29,30c57,64
+< 	int32 proxyIdA;
+< 	int32 proxyIdB;
+---
+> 	uint16 GetNext() const { return lowerBounds[0]; }
+> 	void SetNext(uint16 next) { lowerBounds[0] = next; }
+> 	bool IsValid() const { return overlapCount != b2_invalid; }
+> 
+> 	uint16 lowerBounds[2], upperBounds[2];
+> 	uint16 overlapCount;
+> 	uint16 timeStamp;
+> 	void* userData;
+33,35c67,68
+< /// The broad-phase is used for computing pairs and performing volume queries and ray casts.
+< /// This broad-phase does not persist pairs. Instead, this reports potentially new pairs.
+< /// It is up to the client to consume the new pairs and to track subsequent overlap.
+---
+> typedef float32 (*SortKeyFunc)(void* shape);
+> 
+39,45c72
+< 
+< 	enum
+< 	{
+< 		e_nullProxy = -1
+< 	};
+< 
+< 	b2BroadPhase();
+---
+> 	b2BroadPhase(const b2AABB& worldAABB, b2PairCallback* callback);
+48,50c75,78
+< 	/// Create a proxy with an initial AABB. Pairs are not reported until
+< 	/// UpdatePairs is called.
+< 	int32 CreateProxy(const b2AABB& aabb, void* userData);
+---
+> 	// Use this to see if your proxy is in range. If it is not in range,
+> 	// it should be destroyed. Otherwise you may get O(m^2) pairs, where m
+> 	// is the number of proxies that are out of range.
+> 	bool InRange(const b2AABB& aabb) const;
+52c80,81
+< 	/// Destroy a proxy. It is up to the client to remove any pairs.
+---
+> 	// Create and destroy proxies. These call Flush first.
+> 	uint16 CreateProxy(const b2AABB& aabb, void* userData);
+55,112c84,102
+< 	/// Call MoveProxy as many times as you like, then when you are done
+< 	/// call UpdatePairs to finalized the proxy pairs (for your time step).
+< 	void MoveProxy(int32 proxyId, const b2AABB& aabb, const b2Vec2& displacement);
+< 
+< 	/// Call to trigger a re-processing of it's pairs on the next call to UpdatePairs.
+< 	void TouchProxy(int32 proxyId);
+< 
+< 	/// Get the fat AABB for a proxy.
+< 	const b2AABB& GetFatAABB(int32 proxyId) const;
+< 
+< 	/// Get user data from a proxy. Returns NULL if the id is invalid.
+< 	void* GetUserData(int32 proxyId) const;
+< 
+< 	/// Test overlap of fat AABBs.
+< 	bool TestOverlap(int32 proxyIdA, int32 proxyIdB) const;
+< 
+< 	/// Get the number of proxies.
+< 	int32 GetProxyCount() const;
+< 
+< 	/// Update the pairs. This results in pair callbacks. This can only add pairs.
+< 	template <typename T>
+< 	void UpdatePairs(T* callback);
+< 
+< 	/// Query an AABB for overlapping proxies. The callback class
+< 	/// is called for each proxy that overlaps the supplied AABB.
+< 	template <typename T>
+< 	void Query(T* callback, const b2AABB& aabb) const;
+< 
+< 	/// Ray-cast against the proxies in the tree. This relies on the callback
+< 	/// to perform a exact ray-cast in the case were the proxy contains a shape.
+< 	/// The callback also performs the any collision filtering. This has performance
+< 	/// roughly equal to k * log(n), where k is the number of collisions and n is the
+< 	/// number of proxies in the tree.
+< 	/// @param input the ray-cast input data. The ray extends from p1 to p1 + maxFraction * (p2 - p1).
+< 	/// @param callback a callback class that is called for each proxy that is hit by the ray.
+< 	template <typename T>
+< 	void RayCast(T* callback, const b2RayCastInput& input) const;
+< 
+< 	/// Get the height of the embedded tree.
+< 	int32 GetTreeHeight() const;
+< 
+< 	/// Get the balance of the embedded tree.
+< 	int32 GetTreeBalance() const;
+< 
+< 	/// Get the quality metric of the embedded tree.
+< 	float32 GetTreeQuality() const;
+< 
+< 	/// Shift the world origin. Useful for large worlds.
+< 	/// The shift formula is: position -= newOrigin
+< 	/// @param newOrigin the new origin with respect to the old origin
+< 	void ShiftOrigin(const b2Vec2& newOrigin);
+< 
+< private:
+< 
+< 	friend class b2DynamicTree;
+< 
+< 	void BufferMove(int32 proxyId);
+< 	void UnBufferMove(int32 proxyId);
+---
+> 	// Call MoveProxy as many times as you like, then when you are done
+> 	// call Commit to finalized the proxy pairs (for your time step).
+> 	void MoveProxy(int32 proxyId, const b2AABB& aabb);
+> 	void Commit();
+> 
+> 	// Get a single proxy. Returns NULL if the id is invalid.
+> 	b2Proxy* GetProxy(int32 proxyId);
+> 
+> 	// Query an AABB for overlapping proxies, returns the user data and
+> 	// the count, up to the supplied maximum count.
+> 	int32 Query(const b2AABB& aabb, void** userData, int32 maxCount);
+> 
+> 	// Query a segment for overlapping proxies, returns the user data and
+> 	// the count, up to the supplied maximum count.
+> 	// If sortKey is provided, then it is a function mapping from proxy userDatas to distances along the segment (between 0 & 1)
+> 	// Then the returned proxies are sorted on that, before being truncated to maxCount
+> 	// The sortKey of a proxy is assumed to be larger than the closest point inside the proxy along the segment, this allows for early exits
+> 	// Proxies with a negative sortKey are discarded
+> 	int32 QuerySegment(const b2Segment& segment, void** userData, int32 maxCount, SortKeyFunc sortKey);
+114c104,105
+< 	bool QueryCallback(int32 proxyId);
+---
+> 	void Validate();
+> 	void ValidatePairs();
+116,118c107,108
+< 	b2DynamicTree m_tree;
+< 
+< 	int32 m_proxyCount;
+---
+> private:
+> 	void ComputeBounds(uint16* lowerValues, uint16* upperValues, const b2AABB& aabb);
+120,126c110,111
+< 	int32* m_moveBuffer;
+< 	int32 m_moveCapacity;
+< 	int32 m_moveCount;
+< 
+< 	b2Pair* m_pairBuffer;
+< 	int32 m_pairCapacity;
+< 	int32 m_pairCount;
+---
+> 	bool TestOverlap(b2Proxy* p1, b2Proxy* p2);
+> 	bool TestOverlap(const b2BoundValues& b, b2Proxy* p);
+128,137c113,117
+< 	int32 m_queryProxyId;
+< };
+< 
+< /// This is used to sort pairs.
+< inline bool b2PairLessThan(const b2Pair& pair1, const b2Pair& pair2)
+< {
+< 	if (pair1.proxyIdA < pair2.proxyIdA)
+< 	{
+< 		return true;
+< 	}
+---
+> 	void Query(int32* lowerIndex, int32* upperIndex, uint16 lowerValue, uint16 upperValue,
+> 				b2Bound* bounds, int32 boundCount, int32 axis);
+> 	void IncrementOverlapCount(int32 proxyId);
+> 	void IncrementTimeStamp();
+> 	void AddProxyResult(uint16 proxyId, b2Proxy* proxy, int32 maxCount, SortKeyFunc sortKey);
+139,142c119,120
+< 	if (pair1.proxyIdA == pair2.proxyIdA)
+< 	{
+< 		return pair1.proxyIdB < pair2.proxyIdB;
+< 	}
+---
+> public:
+> 	friend class b2PairManager;
+144,145c122
+< 	return false;
+< }
+---
+> 	b2PairManager m_pairManager;
+147,150c124,125
+< inline void* b2BroadPhase::GetUserData(int32 proxyId) const
+< {
+< 	return m_tree.GetUserData(proxyId);
+< }
+---
+> 	b2Proxy m_proxyPool[b2_maxProxies];
+> 	uint16 m_freeProxy;
+152,157c127
+< inline bool b2BroadPhase::TestOverlap(int32 proxyIdA, int32 proxyIdB) const
+< {
+< 	const b2AABB& aabbA = m_tree.GetFatAABB(proxyIdA);
+< 	const b2AABB& aabbB = m_tree.GetFatAABB(proxyIdB);
+< 	return b2TestOverlap(aabbA, aabbB);
+< }
+---
+> 	b2Bound m_bounds[2][2*b2_maxProxies];
+159,162c129,131
+< inline const b2AABB& b2BroadPhase::GetFatAABB(int32 proxyId) const
+< {
+< 	return m_tree.GetFatAABB(proxyId);
+< }
+---
+> 	uint16 m_queryResults[b2_maxProxies];
+> 	float32 m_querySortKeys[b2_maxProxies];
+> 	int32 m_queryResultCount;
+164,167c133,136
+< inline int32 b2BroadPhase::GetProxyCount() const
+< {
+< 	return m_proxyCount;
+< }
+---
+> 	b2AABB m_worldAABB;
+> 	b2Vec2 m_quantizationFactor;
+> 	int32 m_proxyCount;
+> 	uint16 m_timeStamp;
+169,172c138,139
+< inline int32 b2BroadPhase::GetTreeHeight() const
+< {
+< 	return m_tree.GetHeight();
+< }
+---
+> 	static bool s_validate;
+> };
+174,177d140
+< inline int32 b2BroadPhase::GetTreeBalance() const
+< {
+< 	return m_tree.GetMaxBalance();
+< }
+179c142
+< inline float32 b2BroadPhase::GetTreeQuality() const
+---
+> inline bool b2BroadPhase::InRange(const b2AABB& aabb) const
+181c144,145
+< 	return m_tree.GetAreaRatio();
+---
+> 	b2Vec2 d = b2Max(aabb.lowerBound - m_worldAABB.upperBound, m_worldAABB.lowerBound - aabb.upperBound);
+> 	return b2Max(d.x, d.y) < 0.0f;
+184,185c148
+< template <typename T>
+< void b2BroadPhase::UpdatePairs(T* callback)
+---
+> inline b2Proxy* b2BroadPhase::GetProxy(int32 proxyId)
+187,215c150
+< 	// Reset pair buffer
+< 	m_pairCount = 0;
+< 
+< 	// Perform tree queries for all moving proxies.
+< 	for (int32 i = 0; i < m_moveCount; ++i)
+< 	{
+< 		m_queryProxyId = m_moveBuffer[i];
+< 		if (m_queryProxyId == e_nullProxy)
+< 		{
+< 			continue;
+< 		}
+< 
+< 		// We have to query the tree with the fat AABB so that
+< 		// we don't fail to create a pair that may touch later.
+< 		const b2AABB& fatAABB = m_tree.GetFatAABB(m_queryProxyId);
+< 
+< 		// Query tree, create pairs and add them pair buffer.
+< 		m_tree.Query(this, fatAABB);
+< 	}
+< 
+< 	// Reset move buffer
+< 	m_moveCount = 0;
+< 
+< 	// Sort the pair buffer to expose duplicates.
+< 	std::sort(m_pairBuffer, m_pairBuffer + m_pairCount, b2PairLessThan);
+< 
+< 	// Send the pairs back to the client.
+< 	int32 i = 0;
+< 	while (i < m_pairCount)
+---
+> 	if (proxyId == b2_nullProxy || m_proxyPool[proxyId].IsValid() == false)
+217,233c152
+< 		b2Pair* primaryPair = m_pairBuffer + i;
+< 		void* userDataA = m_tree.GetUserData(primaryPair->proxyIdA);
+< 		void* userDataB = m_tree.GetUserData(primaryPair->proxyIdB);
+< 
+< 		callback->AddPair(userDataA, userDataB);
+< 		++i;
+< 
+< 		// Skip any duplicate pairs.
+< 		while (i < m_pairCount)
+< 		{
+< 			b2Pair* pair = m_pairBuffer + i;
+< 			if (pair->proxyIdA != primaryPair->proxyIdA || pair->proxyIdB != primaryPair->proxyIdB)
+< 			{
+< 				break;
+< 			}
+< 			++i;
+< 		}
+---
+> 		return NULL;
+236,254c155
+< 	// Try to keep the tree balanced.
+< 	//m_tree.Rebalance(4);
+< }
+< 
+< template <typename T>
+< inline void b2BroadPhase::Query(T* callback, const b2AABB& aabb) const
+< {
+< 	m_tree.Query(callback, aabb);
+< }
+< 
+< template <typename T>
+< inline void b2BroadPhase::RayCast(T* callback, const b2RayCastInput& input) const
+< {
+< 	m_tree.RayCast(callback, input);
+< }
+< 
+< inline void b2BroadPhase::ShiftOrigin(const b2Vec2& newOrigin)
+< {
+< 	m_tree.ShiftOrigin(newOrigin);
+---
+> 	return m_proxyPool + proxyId;

@@ -1,0 +1,177 @@
+10c10
+< #include "jni/JNIWorld.h"
+---
+> #include "Headers/gen/com_kristianlm_robotanks_box2dbridge_jnibox2d_JNIBox2DWorld.h"
+42c42
+< b2Fixture* shapeList[MAX_SHAPES];
+---
+> b2Shape* shapeList[MAX_SHAPES];
+90,92c90,91
+<         //TODO: How do I do aabb now...
+< 	// world = new b2World(aabb, gravity, canSleep);
+< 	world = new b2World(gravity);
+---
+> 	world = new b2World(aabb, gravity, canSleep);
+> 	
+94,95c93,94
+<         // TODO: Not sure here....
+< 	// bodyList[0] = world->GetGroundBody();
+---
+> 
+> 	bodyList[0] = world->GetGroundBody();
+235,265c234,235
+< int starting = false;
+< jmethodID g_mid;
+< jobject g_obj;
+< jclass g_clazz;
+< JavaVM * g_vm;
+< 
+< class MyQueryCallback : public b2QueryCallback {
+<   public:
+<       // std::vector<b2Body*> foundBodies;
+<       bool ReportFixture(b2Fixture* fixture) {
+<           printf("In Callback");
+<           JNIEnv * g_env;
+<           int getEnvStat = g_vm->GetEnv((void **)&g_env, JNI_VERSION_1_6);
+<           b2Body* body = fixture->GetBody();
+<           float x = body->GetWorldCenter().x,
+<                         y = body->GetWorldCenter().y,
+<                         vx = body->GetLinearVelocity().x,
+<                         vy = body->GetLinearVelocity().y,
+<                         angle = body->GetAngle(),
+<                         avel = body->GetAngularVelocity(),
+<                         inertiaInv = 1.0f / body->GetInertia();
+<           g_env->CallVoidMethod((jobject)body->GetUserData(), callbackSetData, x, y, vx, vy, angle, avel, inertiaInv);
+<           // foundBodies.push_back( body ); 
+<           // if(!body->IsStatic() || !body->IsJNIUpdated()) {
+<             // updateBodyData(env, body);
+<             // env->SetObjectArrayElement(array, i, JNIShape);
+<           // }            
+<           jobject JNIShape = (jobject) fixture->GetUserData();
+<           return true;//keep going to find all fixtures in the query area
+<       }
+<  };
+---
+> JNIEXPORT jint JNICALL Java_com_kristianlm_robotanks_box2dbridge_jnibox2d_JNIBox2DWorld_nShapeQuery
+>   (JNIEnv *env, jobject, jfloat x1, jfloat y1, jfloat x2, jfloat y2, jint maxCount, jobjectArray array) {
+268,282d237
+< 
+< JNIEXPORT void JNICALL Java_com_kristianlm_robotanks_box2dbridge_jnibox2d_JNIBox2DWorld_nShapeQuery
+<   (JNIEnv *env, jobject obj, jfloat x1, jfloat y1, jfloat x2, jfloat y2, jint maxCount, jobjectArray array) {
+<         printf("Starting Shape Query");
+<         MyQueryCallback queryCallback;
+<         env->GetJavaVM(&g_vm);
+<         g_obj = env->NewGlobalRef(obj);
+<         if(g_clazz == 0) {
+<           g_clazz = env->GetObjectClass(g_obj);
+<         } 
+<         callbackSetData = env->GetMethodID(g_clazz, "callbackSetData", "(FFFFFFF)V");
+<         if(callbackSetData == 0) {
+<           throwExc(env, "callbackSetData method ID (FFFFFFF)V not found");
+<           return;
+<         }
+287a243
+> 	b2Shape** shapeList = new b2Shape* [maxCount];
+289c245,282
+< 	world->QueryAABB(&queryCallback, aabb);
+---
+> 	int count = world->Query(aabb, shapeList, maxCount);
+> 
+> 	int upCount = 0;
+> 	for (int32 i = 0; i < count; ++i)
+> 	{
+> 		jobject JNIShape = (jobject) shapeList[i]->GetUserData();
+> 
+> 		// update the JNI body position unless sleeping
+> 		// sleeping bodies never change their position
+> 		b2Body* body = shapeList[i]->GetBody();
+> 
+> //		printf("#%d: ", i);
+> //		if(body->IsStatic())
+> //			printf("\tstatic");
+> //		else
+> //			printf("\tdynamic");
+> //		printf("\tflag = %d ", body->IsJNIUpdated());
+> 
+> 		// if the body is static and has updated flag set, don't update
+> 		if(!body->IsStatic() || !body->IsJNIUpdated()) {
+> 			updateBodyData(env, body);
+> 			// set updated flag
+> 			body->SetJNIUpdated();
+> 			upCount++;
+> 
+> //			printf("\tnew up.=", body->IsJNIUpdated());
+> 		}
+> //		printf(" | ");
+> 		env->SetObjectArrayElement(array, i, JNIShape);
+> 	}
+> 
+> //	printf(" - TOTAL %d updates\n", upCount);
+> //	fflush(stdout);
+> 
+> 
+> 	delete [] shapeList;
+> 
+> 	return count;
+297,319c290
+< class MyRayCastCallback : public b2RayCastCallback
+< {
+<   public:
+<   MyRayCastCallback()
+<   {
+<     m_fixture = NULL;
+<   }
+<   float32 ReportFixture(b2Fixture* fixture, const b2Vec2& point,
+<   const b2Vec2& normal, float32 fraction)
+<   {
+<     printf("Raycast Callback");
+<     m_fixture = fixture;
+<     m_point = point;
+<     m_normal = normal;
+<     m_fraction = fraction;
+<     return fraction;
+<   }
+<   b2Fixture* m_fixture;
+<   b2Vec2 m_point;
+<   b2Vec2 m_normal;
+<   float32 m_fraction;
+< };
+< JNIEXPORT void JNICALL Java_com_kristianlm_robotanks_box2dbridge_jnibox2d_JNIBox2DWorld_nRaycastOne
+---
+> JNIEXPORT jobject JNICALL Java_com_kristianlm_robotanks_box2dbridge_jnibox2d_JNIBox2DWorld_nRaycastOne
+321,325c292,320
+<         printf("Calling Raycast");
+<         MyRayCastCallback callback;
+<         b2Vec2 point1(p1x, p1y);
+<         b2Vec2 point2(p2x, p2y);
+< 	world->RayCast(&callback, point1, point2);
+---
+> 
+> 	float32 lambda = 1;
+> 	b2Vec2 normal;
+> 
+> 	b2Segment segment;
+> 	segment.p1.x = p1x;
+> 	segment.p1.y = p1y;
+> 
+> 	segment.p2.x = p2x;
+> 	segment.p2.y = p2y;
+> 
+> //	cout << "p1 = (" << segment.p1.x << ", " << segment.p1.y << ")  ";
+> //	cout << "p2 = (" << segment.p2.x << ", " << segment.p2.y << ") \n";
+> 
+> 
+> 	b2Shape* shape = world->RaycastOne(segment, &lambda, &normal, solidShapes, NULL);
+> 
+> 	jclass classRaycastResult = env->GetObjectClass(raycastRes);
+> 	jfieldID fieldIDlambda = env->GetFieldID(classRaycastResult, "lambda", "F");
+> 
+> 	env->SetFloatField(raycastRes, fieldIDlambda, lambda);
+> 
+> //	cout << "native lambda: " << lambda << "\t\t" << flush;
+> 
+> 	if(shape == NULL)
+> 		return NULL;
+> 
+> 
+> 	return (jobject)shape->GetUserData();

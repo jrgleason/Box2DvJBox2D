@@ -68,31 +68,32 @@ public class GameImpl implements GameInterface {
 						new Vec2( 50,  50)
 					);
 		
-		Vec2 gravity = new Vec2(0, -9.8f); 
-
+		// Vec2 gravity = new Vec2(0, -9.8f); 
+       
+		Vec2 gravity = new Vec2(0, -10.0f);
+		
 		world.create(
 				aabb,
 				gravity,
 				true);
 		
 		GameShape gs;
-	        float x = 0;
-                float y = 0;
-                float o = 0.0f;
-                for(int i =0 ; i<100; i++){	
-		  gs = GameShape.create(new GLRectangle(2, 0.5f));
-		  IBody b1 = gs.attachToNewBody(world, null, density);
-                  x = (float).1*i;
-                  y = (float).1*i;
-                  
-		  b1.setPosition(new Vec2((float).1*i, (float).1*i));
-		  gsl.add(gs);
-                }
+	    float x = 0, y = 0, o = 0.0f;
+	    int i =0;
+        //for(i =0 ; i<100; i++){	
+//		  gs = GameShape.create(new GLRectangle(2, 0.5f));
+//		  IBody b1 = gs.attachToNewBody(world, null, density);
+//                  x = (float).1*i;
+//                  y = (float).1*i;
+//                  
+//		  b1.setPosition(new Vec2((float).1*i, (float).1*i));
+//		  gsl.add(gs);
+        //}
 		
-		// gs = GameShape.create(new GLRectangle(1, 0.5f));
-		// IBody b2 = gs.attachToNewBody(world, null, density);
-		// b2.setPosition(new Vec2(0,-1));
-		// gsl.add(gs);
+		 gs = GameShape.create(new GLRectangle(1, 0.5f));
+		 IBody b2 = gs.attachToNewBody(world, null, density);
+		 b2.setPosition(new Vec2(0,-1));
+		 gsl.add(gs);
 		
 		makeFence();
 	}
@@ -176,7 +177,7 @@ public class GameImpl implements GameInterface {
 			World w = jw.getWorld();
 			w.setGravity(new Vec2(MainActivity.x, MainActivity.y));
 		}
-		
+		// Log.d("Game", "Stepping");
 		world.step(TIME_STEP, ITERATIONS);
 		world.sync();
 	}

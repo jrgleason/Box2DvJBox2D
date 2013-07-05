@@ -29,6 +29,8 @@ import org.jbox2d.common.RaycastResult;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyDef;
 
+import android.util.Log;
+
 import com.kristianlm.robotanks.box2dbridge.IBody;
 import com.kristianlm.robotanks.box2dbridge.IJoint;
 import com.kristianlm.robotanks.box2dbridge.IShape;
@@ -91,7 +93,7 @@ public class JNIBox2DWorld implements IWorld {
 
 	@Override
 	public IShape[] query(AABB aabb, int maxCount) {
-
+		Log.d("Query", "querying");
 		JNIBox2DShape[] shapeList = new JNIBox2DShape[maxCount];
 		
 		nShapeQuery(aabb.lowerBound.x, aabb.lowerBound.y,
@@ -145,7 +147,7 @@ public class JNIBox2DWorld implements IWorld {
 	@Override
 	public IShape raycastOne(Segment s, RaycastResult rr, boolean solidShapes,
 			Object userData) {
-
+		Log.d("Ray Casting", "Ray Casting Started");
 		JNIBox2DShape shape = nRaycastOne(s.p1.x, s.p1.y, s.p2.x, s.p2.y, rr,
 				solidShapes, userData);
 
@@ -172,6 +174,7 @@ public class JNIBox2DWorld implements IWorld {
 	
 	@Override
 	public void sync() {
+		Log.d("Calling nat", "Updating all positions");
 		nUpdateAllPositions();		
 	}
 	// implemented in C/C++
@@ -187,6 +190,7 @@ public class JNIBox2DWorld implements IWorld {
 			System.loadLibrary("box2d");
 			jniOk = true;
 		} catch (java.lang.UnsatisfiedLinkError e) {
+			Log.d("Issue", "Could not find the native library");
 			jniOk = false;
 		}
 	}

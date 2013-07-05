@@ -1,0 +1,77 @@
+8c8
+< #include "jni/JNIBody.h"
+---
+> #include "Headers/gen/com_kristianlm_robotanks_box2dbridge_jnibox2d_JNIBox2DBody.h"
+71c71,72
+< 	b2PolygonShape pd;
+---
+> 	b2PolygonDef pd;
+> 	pd.density = density;
+88c89,90
+< 			shapeList[i] = bodyList[ID]->CreateFixture(&pd, density);
+---
+> 			shapeList[i] = bodyList[ID]->CreateShape(&pd);
+> 
+114,117c116,118
+< 	b2PolygonShape pd;
+<         int lenV = len / 3;
+<         b2Vec2 vertices[lenV];
+< 	// pd.vertexCount = len / 3;
+---
+> 	b2PolygonDef pd;
+> 	pd.density = density;
+> 	pd.vertexCount = len / 3;
+121c122
+< 		vertices[i].Set(vl[i * 3 + 0], vl[i * 3 + 1]);
+---
+> 		pd.vertices[i].Set(vl[i * 3 + 0], vl[i * 3 + 1]);
+123c124
+<         // pd->Set(&vertices[0],lenV);
+---
+> 
+130c131
+< 	b2Fixture* shape = bodyList[bodyID]->CreateFixture(&pd, density);
+---
+> 	b2Shape* shape = bodyList[bodyID]->CreateShape(&pd);
+188c189
+< 	bodyList[ID]->ApplyForce(force, point, false);
+---
+> 	bodyList[ID]->ApplyForce(force, point);
+207c208
+< 	bodyList[ID]->ApplyTorque(torque, false);
+---
+> 	bodyList[ID]->ApplyTorque(torque);
+231c232
+< 	bodyList[ID]->ResetMassData();
+---
+> 	bodyList[ID]->SetMassFromShapes();
+249,250c250,251
+< 	bodyList[ID]->SetLinearDamping(liDa);
+< 	bodyList[ID]->SetAngularDamping(anDa);
+---
+> 	bodyList[ID]->m_linearDamping = liDa;
+> 	bodyList[ID]->m_angularDamping = anDa;
+266c267
+< 	b2Fixture* s = bodyList[ID]->GetFixtureList();
+---
+> 	b2Shape* s = bodyList[ID]->GetShapeList();
+268c269
+< 	b2Filter filter;
+---
+> 	b2FilterData filter;
+274c275
+< 	s->Refilter();
+---
+> 	world->Refilter(s);
+305c306
+< 	b2Filter shapeFD = bodyList[bodyID]->GetFixtureList()->GetFilterData();
+---
+> 	b2FilterData shapeFD = bodyList[bodyID]->GetShapeList()->GetFilterData();
+344c345
+< 	bodyList[bodyID]->DestroyFixture(shapeList[shapeID]);
+---
+> 	bodyList[bodyID]->DestroyShape(shapeList[shapeID]);
+364c365
+< 	bodyList[id]->SetTransform(pos, bodyList[id]->GetAngle());
+---
+> 	bodyList[id]->SetXForm(pos, bodyList[id]->GetAngle());
