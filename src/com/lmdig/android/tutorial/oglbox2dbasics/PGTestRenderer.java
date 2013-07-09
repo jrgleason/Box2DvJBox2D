@@ -30,6 +30,7 @@ import com.lmdig.android.tutorial.oglbox2dbasics.game.GameImpl;
 import com.lmdig.android.tutorial.oglbox2dbasics.game.GameInterface;
 
 import android.opengl.GLSurfaceView.Renderer;
+import android.util.Log;
 
 public class PGTestRenderer implements Renderer {
 
@@ -73,6 +74,7 @@ public class PGTestRenderer implements Renderer {
 
 		gl.glMatrixMode(GL10.GL_PROJECTION);
 		gl.glLoadIdentity();
+		Log.d("Frustum", "Creating Frustum from w:"+width+" and h:"+height);
 		gl.glFrustumf(-(width / (float) height), ((float) width / height), -1,
 				1, 1f, 100);
 
@@ -93,7 +95,7 @@ public class PGTestRenderer implements Renderer {
 
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
-		gl.glTranslatef(0, 0, -5);
+		gl.glTranslatef(0, -5, -5);
 		
 		game.gameLoop();
 		

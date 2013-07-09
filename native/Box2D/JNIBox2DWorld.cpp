@@ -65,7 +65,6 @@ JNIEXPORT jint JNICALL Java_com_kristianlm_robotanks_box2dbridge_jnibox2d_JNIBox
  */
 JNIEXPORT jint JNICALL Java_com_kristianlm_robotanks_box2dbridge_jnibox2d_JNIBox2DWorld_nCreateWorld
   (JNIEnv * env, jobject caller, jfloat x1, jfloat y1, jfloat x2, jfloat y2, jfloat gx, jfloat gy, jboolean canSleep) {
-        printf("Creating the world");
 
 	for(int i = 0 ; i < MAX_BODIES ; i++) {
 		bodyList[i] = 0;
@@ -81,17 +80,19 @@ JNIEXPORT jint JNICALL Java_com_kristianlm_robotanks_box2dbridge_jnibox2d_JNIBox
 		globalRef[i] = 0;
 
 
-	b2AABB aabb;
-	aabb.lowerBound.Set(x1, y1);
-	aabb.upperBound.Set(x2, y2);
+    b2AABB aabb;
+    aabb.lowerBound.Set(x1, y1);
+    aabb.upperBound.Set(x2, y2);
 
-	b2Vec2 gravity;
-	gravity.Set(gx, gy);
-	LOGD("Gravity set to %f, %f", gx, gy);
+    LOGD("Lower Bound %f,%f Upper Bound %f, %f", x1, y1, x2, y2);
 
-        //TODO: How do I do aabb now...
-	// world = new b2World(aabb, gravity, canSleep);
-	world = new b2World(gravity);
+    b2Vec2 gravity;
+    gravity.Set(gx, gy);
+    LOGD("Gravity set to %f, %f", gx, gy);
+
+    //TODO: How do I do aabb now...
+    // world = new b2World(aabb, gravity, canSleep);
+    world = new b2World(gravity);
     world->SetAllowSleeping(canSleep);
     b2BodyDef groundBodyDef;
     groundBodyDef.position.Set(0.0f, -10.0f);
@@ -104,6 +105,73 @@ JNIEXPORT jint JNICALL Java_com_kristianlm_robotanks_box2dbridge_jnibox2d_JNIBox
     bodyList[0] = groundBody;
 }
 
+JNIEXPORT void JNICALL Java_com_kristianlm_robotanks_box2dbridge_jnibox2d_JNIBox2DWorld_simpleTest(JNIEnv *, jobject){
+	LOGD("Testing the new function");
+	for(int i = 0 ; i < MAX_BODIES ; i++) {
+			bodyList[i] = 0;
+		}
+
+		for(int i = 0 ; i < MAX_SHAPES ; i++)
+			shapeList[i] = 0;
+
+		for(int i = 0 ; i < MAX_JOINTS ; i++)
+			jointList[i] = 0;
+
+		for(int i = 0 ; i < MAX_GLOBAL_REFS ; i++)
+			globalRef[i] = 0;
+		b2AABB aabb;
+		    aabb.lowerBound.Set(-50, -50);
+		    aabb.upperBound.Set(50, 50);
+    // Define the gravity vector.
+    b2Vec2 gravity;
+    gravity.Set(0, -10);
+    // Construct a world object, which will hold and simulate the rigid bodies.
+    world = new b2World(gravity);
+    LOGD("The World was created");
+    // Define the ground body.
+    b2BodyDef groundBodyDef;
+    groundBodyDef.position.Set(0.0f, -10.0f);
+
+    // Call the body factory which allocates memory for the ground body
+    // from a pool and creates the ground box shape (also from a pool).
+    // The body is also added to the world.
+    bodyList[0]= world->CreateBody(&groundBodyDef);
+    LOGD("The Ground Body created");
+    // Define the ground box shape.
+    b2PolygonShape groundBox;
+
+    // The extents are the half-widths of the box.
+    groundBox.SetAsBox(50.0f, 10.0f);
+
+    // Add the ground fixture to the ground body.
+    shapeList[0] = bodyList[0]->CreateFixture(&groundBox, 0.0f);
+
+    // Define the dynamic body. We set its position and call the body factory.
+    b2BodyDef bodyDef;
+    bodyDef.type = b2_dynamicBody;
+    bodyDef.position.Set(0.0f, -1.0f);
+    bodyList[1]=world->CreateBody(&bodyDef);
+    LOGD("The Body created");
+    // Define another box shape for our dynamic body.
+    b2PolygonShape dynamicBox;
+    dynamicBox.SetAsBox(1.0f, 1.0f);
+
+    // Define the dynamic body fixture.
+    b2FixtureDef fixtureDef;
+    fixtureDef.shape = &dynamicBox;
+
+    // Set the box density to be non-zero, so it will be dynamic.
+    fixtureDef.density = 1.0f;
+
+    // Override the default friction.
+    fixtureDef.friction = 0.3f;
+
+    // Add the shape to the body.
+    shapeList[1] = bodyList[1]->CreateFixture(&fixtureDef);
+    LOGD("And on the seventh day....");
+}
+
+
 /*
  * Class:     com_kristianlm_superelevation_box2dbridge_jnibox2d_JNIBox2DWorld
  * Method:    step
@@ -111,8 +179,25 @@ JNIEXPORT jint JNICALL Java_com_kristianlm_robotanks_box2dbridge_jnibox2d_JNIBox
  */
 JNIEXPORT void JNICALL Java_com_kristianlm_robotanks_box2dbridge_jnibox2d_JNIBox2DWorld_step
   (JNIEnv *, jobject, jfloat dt, jint iterations) {
-	LOGD("Gravity is %f", world->GetGravity().y);
-	world->Step(dt, iterations, iterations);
+	LOGD("Stepping into...");
+	if(world == NULL){
+		LOGD("Yup that is the issue...");
+	}
+	else{
+	    LOGD("Gravity is %f", world->GetGravity().y);
+	}
+	for (b2Body* b = world->GetBodyList(); b; b = b->GetNext())
+	{
+			b2Vec2 position = b->GetPosition();
+			float32 angle = b->GetAngle();
+			float32 yVelocity = b->GetLinearVelocity().y;
+			LOGD("Before %4.2f %4.2f %4.2f %f \n", position.x, position.y, angle, yVelocity);
+	}
+
+	//world->Step(dt, iterations, iterations);
+	int32 velocityIterations = 6;
+	int32 positionIterations = 2;
+	world->Step(dt, velocityIterations, positionIterations);
 	for (b2Body* b = world->GetBodyList(); b; b = b->GetNext())
 	{
 		b2Vec2 position = b->GetPosition();
@@ -147,7 +232,7 @@ JNIEXPORT void JNICALL Java_com_kristianlm_robotanks_box2dbridge_jnibox2d_JNIBox
  */
 JNIEXPORT jint JNICALL Java_com_kristianlm_robotanks_box2dbridge_jnibox2d_JNIBox2DWorld_nCreateBody
   (JNIEnv *, jobject, jfloat x, jfloat y) {
-
+    LOGD("Creating Body");
 	b2BodyDef bd;
 	bd.type = b2_dynamicBody;
 //	bd.fixedRotation = true;

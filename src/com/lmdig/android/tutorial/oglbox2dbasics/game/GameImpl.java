@@ -71,31 +71,31 @@ public class GameImpl implements GameInterface {
 		// Vec2 gravity = new Vec2(0, -9.8f); 
        
 		Vec2 gravity = new Vec2(0, -10.0f);
-		
+		Log.d("Problem Seeker", "Test one");
 		world.create(
 				aabb,
 				gravity,
 				true);
-		
+		Log.d("Problem Seeker", "Test two");
 		GameShape gs;
 	    float x = 0, y = 0, o = 0.0f;
 	    int i =0;
-        //for(i =0 ; i<100; i++){	
-//		  gs = GameShape.create(new GLRectangle(2, 0.5f));
-//		  IBody b1 = gs.attachToNewBody(world, null, density);
-//                  x = (float).1*i;
-//                  y = (float).1*i;
-//                  
-//		  b1.setPosition(new Vec2((float).1*i, (float).1*i));
-//		  gsl.add(gs);
-        //}
+        for(i =0 ; i<1; i++){	
+		  gs = GameShape.create(new GLRectangle(2, 0.5f));
+		  IBody b1 = gs.attachToNewBody(world, null, density);
+          x = (float).1*i+5;
+          y = (float).1*i+1;
+                  
+		  b1.setPosition(new Vec2(-1, y));
+		  gsl.add(gs);
+        }
 		
 		 gs = GameShape.create(new GLRectangle(1, 0.5f));
 		 IBody b2 = gs.attachToNewBody(world, null, density);
-		 b2.setPosition(new Vec2(0,-1));
+		 b2.setPosition(new Vec2(0,3));
 		 gsl.add(gs);
-		
-		makeFence();
+		 Log.d("Problem Seeker", "Finished");
+		 makeFence();
 	}
 	
 	private void makeFence() {
@@ -139,7 +139,7 @@ public class GameImpl implements GameInterface {
 	
 	@Override
 	public void drawFrame() {
-
+        Log.d("Problem Finder", "Test One One");
 		glColor4f(1, 1, 1, 1);
 		
 		for(GameShape gs : gsl) {
@@ -153,6 +153,7 @@ public class GameImpl implements GameInterface {
 
 	@Override
 	public void gameLoop() {
+		Log.d("Problem Finder", "Game loop");
 		if(world == null) {
 			Log.e("pg", "World not initialized");
 			return;
@@ -177,8 +178,9 @@ public class GameImpl implements GameInterface {
 			World w = jw.getWorld();
 			w.setGravity(new Vec2(MainActivity.x, MainActivity.y));
 		}
-		// Log.d("Game", "Stepping");
+	    Log.d("Game", "Stepping");
 		world.step(TIME_STEP, ITERATIONS);
+		Log.d("Game", "Stepping");
 		world.sync();
 	}
 	

@@ -73,7 +73,7 @@ public class JNIBox2DBody implements IBody {
 	 */
 	public void callbackSetData(float x, float y, float vx, float vy,
 			float angle, float avel, float inertiaInv) {
-	    Log.d("Native","Calling Callback on body "+this.toString()+" x:"+x+" y:"+y+" angVel:"+avel);
+	    //Log.d("Native","Calling Callback on body "+this.toString()+" x:"+x+" y:"+y+" angVel:"+avel);
 		position.x = x;
 		position.y = y;
 

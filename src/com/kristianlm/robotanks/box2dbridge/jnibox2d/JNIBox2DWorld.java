@@ -58,8 +58,6 @@ public class JNIBox2DWorld implements IWorld {
 	
 	@Override
 	public int create(AABB worldAABB, Vec2 gravity, boolean doSleep) {
-		
-		
 		if(!isJniOK()) {
 			// our loadlibrary function failed (native lib not found)
 			return -1;
@@ -68,9 +66,9 @@ public class JNIBox2DWorld implements IWorld {
 		nCreateWorld(	worldAABB.lowerBound.x, worldAABB.lowerBound.y,
 						worldAABB.upperBound.x, worldAABB.upperBound.y, gravity.x,
 						gravity.y, doSleep);
-
+//		simpleTest();
 		groundBody = new JNIBox2DBody(0);
-
+		
 		return 0;
 	}
 
@@ -199,6 +197,8 @@ public class JNIBox2DWorld implements IWorld {
 
 	native public int nCreateWorld(float x1, float y1, float x2, float y2,
 			float gravity_x, float gravity_y, boolean canSleep);
+	
+	native public void simpleTest();
 
 	// fills shapeList with IDs of shapes
 	native private int nShapeQuery(float x1, float y1, float x2, float y2,
