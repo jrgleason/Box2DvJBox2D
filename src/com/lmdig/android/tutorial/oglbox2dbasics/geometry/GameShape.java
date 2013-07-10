@@ -36,6 +36,7 @@ abstract public class GameShape {
 	abstract public void draw();
 	abstract public IShape attachToBody(IBody body, Vec2 position, float density);
 	abstract public IBody attachToNewBody(IWorld world, Vec2 position, float density);
+	abstract public IBody attachToNewBodyOther(IWorld world, Vec2 position, float density);
 	abstract public void detachFromBody(IBody body);
 	abstract public void detachBody(IWorld world);
 	

@@ -98,6 +98,41 @@ public class GameShapeRectangle extends GameShape {
 		body.setMassFromShapes();
 		return shape;
 	}
+	@Override
+	public IBody attachToNewBodyOther(IWorld world, Vec2 position, float density) {
+
+		BodyDef def = new BodyDef();
+		def.angularDamping = 0.5f;
+		def.linearDamping = 0.5f;
+		def.allowSleep = false;
+		body = world.createBody(def);
+		
+		attachToBodyNoSquare(body, position, density);
+		
+		body.refilter(0xFFFF, 0xFFFF, 0);
+
+		return body;
+	}
+    public void attachToBodyNoSquare(IBody body, Vec2 position, float density) {
+		
+		if(this.shape != null) {
+			throw new RuntimeException("Shape already attached");
+		}
+		
+		if(position == null)
+			position = new Vec2(0, 10);
+		
+		shapePosition = position;
+		
+		this.body = body;
+		body.createOther(
+				    position.x, 
+					position.y
+				);
+		
+
+		body.setMassFromShapes();
+	}
 	
 	
 	@Override

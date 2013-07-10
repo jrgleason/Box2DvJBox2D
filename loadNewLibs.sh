@@ -1,1 +1,6 @@
-cp native/Box2D/libs/armeabi/* libs/armeabi/
+cd native/Box2D
+./BuildDroid.sh
+cd ../OpenBox
+./BuildDroid.sh
+cd ../../
+cp native/OpenBox/libs/armeabi/* libs/armeabi/

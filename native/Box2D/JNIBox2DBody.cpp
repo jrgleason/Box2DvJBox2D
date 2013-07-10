@@ -53,6 +53,51 @@ JNIEXPORT void JNICALL Java_com_kristianlm_robotanks_box2dbridge_jnibox2d_JNIBox
 
 }
 
+JNIEXPORT jint JNICALL Java_com_kristianlm_robotanks_box2dbridge_jnibox2d_JNIBox2DBody_nCreateShapeNo
+  (JNIEnv *, jobject, jint ID, jfloat x, jfloat y, jfloat density) {
+	LOGD("Starting Shape");
+	if(bodyList[ID] == 0)
+		return -1;
+
+	b2PolygonShape pd;
+
+	b2Vec2 center;
+	center.Set(x, y);
+	b2Vec2 vertices[5];
+	vertices[0].Set(0.0f, 4.0f);
+	vertices[1].Set(1.0f, 4.0f);
+	vertices[2].Set(1.5f, 5.0f);
+	vertices[2].Set(1.0f, 6.0f);
+	vertices[2].Set(0.0f, 6.0f);
+	int32 count = 3;
+	b2PolygonShape polygon;
+	polygon.Set(vertices, count);
+
+
+	//pd.SetAsBox(width, height, center, angle);
+	/*pd.filter.categoryBits = categoryBits;
+	pd.filter.maskBits = mask;
+	pd.filter.groupIndex = groupIndex;*/
+
+//	cout << "NATIVE: Creating shape for body #" << ID << "\n" << flush;
+
+
+	// find free shapelist spot and return id
+	LOGD("Doing Fixture Checks");
+	for(int i = 0 ; i < MAX_SHAPES ; i++) {
+		if(shapeList[i] == 0) {
+			LOGD("Creating Fixture");
+			b2FixtureDef fixtureDef;
+			fixtureDef.shape = &pd;
+			fixtureDef.density = density;
+			fixtureDef.friction = 0.3f;
+			shapeList[i] = bodyList[ID]->CreateFixture(&fixtureDef);
+			return i;
+		}
+	}
+}
+
+
 /*
  * Class:     com_kristianlm_superelevation_box2dbridge_jnibox2d_JNIBox2DBody
  * Method:    nCreateBox

@@ -27,6 +27,7 @@ import static android.opengl.GLES10.glColor4f;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.gleason.openbox.JNIOpenBox;
 import org.jbox2d.collision.AABB;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
@@ -80,22 +81,22 @@ public class GameImpl implements GameInterface {
 		GameShape gs;
 	    float x = 0, y = 0, o = 0.0f;
 	    int i =0;
-        for(i =0 ; i<1; i++){	
+        for(i =0 ; i<5; i++){	
 		  gs = GameShape.create(new GLRectangle(2, 0.5f));
 		  IBody b1 = gs.attachToNewBody(world, null, density);
-          x = (float).1*i+5;
-          y = (float).1*i+1;
+          x = (float) 1*i+5;
+          y = (float) 1*i+3;
                   
 		  b1.setPosition(new Vec2(-1, y));
 		  gsl.add(gs);
         }
 		
 		 gs = GameShape.create(new GLRectangle(1, 0.5f));
-		 IBody b2 = gs.attachToNewBody(world, null, density);
-		 b2.setPosition(new Vec2(0,3));
-		 gsl.add(gs);
-		 Log.d("Problem Seeker", "Finished");
-		 makeFence();
+		 gs.attachToNewBodyOther(world, null, density);
+		 //b2.setPosition(new Vec2(0,3));
+		 //gsl.add(gs);
+		 //Log.d("Problem Seeker", "Finished");
+		 //makeFence();
 	}
 	
 	private void makeFence() {
@@ -104,27 +105,27 @@ public class GameImpl implements GameInterface {
 		// static bodies are defined as those having mass and intertia 0
 		// this ensures they are never moved. they only affect positions of
 		// other dynamic bodies who collide with them.
-		float density = 0;
-		GameShape gs;
-		gs = GameShape.create(new GLRectangle(50, .1f));
-		gs.attachToBody(ground, new Vec2(0, -4), density);
-		gsl.add(gs);
-		
-		gs = GameShape.create(new GLRectangle(50, .1f));
-		gs.attachToBody(ground, new Vec2(0, 4), density);
-		gsl.add(gs);
-		
-		gs = GameShape.create(new GLRectangle(.1f, 50f));
-		gs.attachToBody(ground, new Vec2(3, 0), density);
-		gsl.add(gs);
-		
-		gs = GameShape.create(new GLRectangle(.1f, 50f));
-		gs.attachToBody(ground, new Vec2(-3, 0), density);
-		gsl.add(gs);
-		
-		gs = GameShape.create(new GLRectangle(.1f, .1f));
-		gs.attachToBody(ground, new Vec2(-.5f, -.5f), density);
-		gsl.add(gs);
+//		float density = 0;
+//		GameShape gs;
+//		gs = GameShape.create(new GLRectangle(50, .1f));
+//		gs.attachToBody(ground, new Vec2(0, -4), density);
+//		gsl.add(gs);
+//		
+//		gs = GameShape.create(new GLRectangle(50, .1f));
+//		gs.attachToBody(ground, new Vec2(0, 4), density);
+//		gsl.add(gs);
+//		
+//		gs = GameShape.create(new GLRectangle(.1f, 50f));
+//		gs.attachToBody(ground, new Vec2(3, 0), density);
+//		gsl.add(gs);
+//		
+//		gs = GameShape.create(new GLRectangle(.1f, 50f));
+//		gs.attachToBody(ground, new Vec2(-3, 0), density);
+//		gsl.add(gs);
+//		
+//		gs = GameShape.create(new GLRectangle(.1f, .1f));
+//		gs.attachToBody(ground, new Vec2(-.5f, -.5f), density);
+//		gsl.add(gs);
 		
 		
 	}
@@ -136,15 +137,17 @@ public class GameImpl implements GameInterface {
 		world.destroy();
 	}
 	
+	JNIOpenBox ob = new JNIOpenBox();
 	
 	@Override
 	public void drawFrame() {
         Log.d("Problem Finder", "Test One One");
 		glColor4f(1, 1, 1, 1);
 		
-		for(GameShape gs : gsl) {
-			gs.draw();
-		}
+		ob.draw();
+//		for(GameShape gs : gsl) {
+//			gs.draw();
+//		}
 	}
 	
 	long nanoTime;
@@ -178,9 +181,9 @@ public class GameImpl implements GameInterface {
 			World w = jw.getWorld();
 			w.setGravity(new Vec2(MainActivity.x, MainActivity.y));
 		}
-	    Log.d("Game", "Stepping");
+	    // Log.d("Game", "Stepping");
 		world.step(TIME_STEP, ITERATIONS);
-		Log.d("Game", "Stepping");
+		// Log.d("Game", "Stepping");
 		world.sync();
 	}
 	

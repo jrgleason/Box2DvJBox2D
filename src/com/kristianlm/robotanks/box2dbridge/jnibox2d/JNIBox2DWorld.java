@@ -185,7 +185,7 @@ public class JNIBox2DWorld implements IWorld {
 	public static boolean isJniOK() { return jniOk; }
 	static {
 		try  {
-			System.loadLibrary("box2d");
+			System.loadLibrary("box2D");
 			jniOk = true;
 		} catch (java.lang.UnsatisfiedLinkError e) {
 			Log.d("Issue", "Could not find the native library");

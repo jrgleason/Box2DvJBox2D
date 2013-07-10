@@ -34,4 +34,5 @@ void throwExc(JNIEnv* env, const char* msg);
 
 
 
+
 #endif /* JNIBOX2DWORLD_H_ */

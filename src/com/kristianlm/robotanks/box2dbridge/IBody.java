@@ -72,5 +72,7 @@ public interface IBody {
 	
 	
 	public void setPosition(Vec2 pos);
+	
+	public void createOther(float x, float y);
 
 }

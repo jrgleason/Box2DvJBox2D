@@ -104,6 +104,15 @@ public class JNIBox2DBody implements IBody {
 		IShape s = new JNIBox2DShape(shapeID, this);
 		return s;
 	}
+	
+	@Override
+	public void createOther(float x, float y) {
+		nCreateShapeNo(bodyID, x, y, 1);
+		// System.out.println("Created shape ID " + shapeID);
+
+//		IShape s = new JNIBox2DShape(shapeID, this);
+//		return s;
+	}
 
 	@Override
 	public void applyForce(Vec2 force, Vec2 point) {
@@ -220,7 +229,7 @@ public class JNIBox2DBody implements IBody {
 	}
 
 	static {
-		System.loadLibrary("box2d");
+		System.loadLibrary("box2D");
 	}
 
 	native void nUpdateData(int ID);
@@ -228,6 +237,8 @@ public class JNIBox2DBody implements IBody {
 	native int nCreateBox(int ID, float width, float height, float x, float y,
 			float density, float angle);
 
+	native int nCreateShapeNo(int ID, float x, float y, float density);
+	
 	native int nCreateShape(int ID, float density, float[] ordered_vlist);
 
 	native void nApplyForce(int ID, float fx, float fy, float px, float py);
@@ -253,5 +264,7 @@ public class JNIBox2DBody implements IBody {
 	native private void nDestroyShape(int bodyID, int shapeID);
 	
 	native private void nSetPosition(int bodyID, float posx, float posy);
+	
+	native private void nCreateShape(int bodyID, float posx, float posy);
 
 }
