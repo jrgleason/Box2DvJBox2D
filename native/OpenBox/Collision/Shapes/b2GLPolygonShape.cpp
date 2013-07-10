@@ -28,7 +28,8 @@ void b2GLPolygonShape::Draw(){
 
 void b2GLPolygonShape::Draw(b2PolygonShape* s, b2Body* b){
 	b2Vec2 center = b->GetPosition();
-	LOGD("Count is... %d, Center is %f, %f", s->m_count, center.x, center.y);
+
+
 	GLfloat c[s->m_count*2];
 	int i=0;
 	int i2=0;
@@ -38,7 +39,11 @@ void b2GLPolygonShape::Draw(b2PolygonShape* s, b2Body* b){
     	b2Vec2 v = s->m_vertices[i];
 		float x = center.x + v.x;
 		float y = center.y + v.y;
-		LOGD("Vertex is... %f, %f", x, y);
+		if(s->m_count>4){
+				LOGD("Count is... %d, Center is %f, %f", s->m_count, center.x, center.y);
+				LOGD("Vertex is... %f, %f", x, y);
+		}
+
 		c[i2++] =  x;
 		c[i2++] =  y;
 	}

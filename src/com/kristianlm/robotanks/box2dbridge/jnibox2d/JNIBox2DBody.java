@@ -107,6 +107,7 @@ public class JNIBox2DBody implements IBody {
 	
 	@Override
 	public void createOther(float x, float y) {
+		Log.d("Mr. Marley"," Test");
 		nCreateShapeNo(bodyID, x, y, 1);
 		// System.out.println("Created shape ID " + shapeID);
 

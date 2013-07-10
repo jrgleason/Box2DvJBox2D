@@ -81,6 +81,7 @@ public class GameImpl implements GameInterface {
 		GameShape gs;
 	    float x = 0, y = 0, o = 0.0f;
 	    int i =0;
+	    
         for(i =0 ; i<5; i++){	
 		  gs = GameShape.create(new GLRectangle(2, 0.5f));
 		  IBody b1 = gs.attachToNewBody(world, null, density);
@@ -91,8 +92,10 @@ public class GameImpl implements GameInterface {
 		  gsl.add(gs);
         }
 		
-		 gs = GameShape.create(new GLRectangle(1, 0.5f));
-		 gs.attachToNewBodyOther(world, null, density);
+        gs = GameShape.create(new GLRectangle(1, 0.5f));
+	    gs.attachToNewBodyOther(world, null, density);
+	    gsl.add(gs);
+		 
 		 //b2.setPosition(new Vec2(0,3));
 		 //gsl.add(gs);
 		 //Log.d("Problem Seeker", "Finished");
