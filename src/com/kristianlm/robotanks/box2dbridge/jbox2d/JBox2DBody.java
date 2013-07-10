@@ -186,4 +186,10 @@ public class JBox2DBody implements IBody {
 	public Body getBody() {
 		return body;
 	}
+
+	@Override
+	public void createOther(float x, float y) {
+		// TODO Auto-generated method stub
+		
+	}
 }
