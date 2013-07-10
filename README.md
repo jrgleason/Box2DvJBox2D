@@ -7,14 +7,12 @@ This is a tool to compair performance/speed of Box2D (native) and JBox2D (Java) 
 Use
 ===
 
-To test the differance switch the default here...
-
-vi .//src/com/kristianlm/robotanks/box2dbridge/Box2DFactory.java
-
-and you can change the body count in the for loop.
-
+./loadNewLibs.sh
+android update project -p ./ -t <target>
+ant debug
+ant installd
 
 ISSUES
 ======
 
-I am currently porting to a new version of Box2D but for now you need to use the libs in oldlibs
+JBox has been neglected, should change namespaces

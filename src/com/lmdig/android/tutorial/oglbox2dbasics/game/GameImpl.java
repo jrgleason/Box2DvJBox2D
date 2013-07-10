@@ -86,9 +86,9 @@ public class GameImpl implements GameInterface {
 		  gs = GameShape.create(new GLRectangle(2, 0.5f));
 		  IBody b1 = gs.attachToNewBody(world, null, density);
           x = (float) 1*i+5;
-          y = (float) 1*i+3;
+          y = (float) 1*i+10;
                   
-		  b1.setPosition(new Vec2(-1, y));
+		  b1.setPosition(new Vec2(0, y));
 		  gsl.add(gs);
         }
 		
